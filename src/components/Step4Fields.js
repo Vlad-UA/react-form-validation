@@ -1,32 +1,25 @@
 import React from "react";
-import InputText from "./InputText";
-import InputRadioElement from "./InputRadioElement";
 
-export default class Step1Fields extends React.Component {
+export default class Step4Fields extends React.Component {
     render() {
-        const {inputOnChange, fields, errors} = this.props;
+        const {fields:{avatar, firstname, lastname, email, mobile, country, city} } = this.props;
         return (
             <React.Fragment>
-                <InputText labelText="First Name" name="firstname" placeholder="Enter first name"
-                           defaultValue={fields.firstname}
-                           onChange={inputOnChange} error={errors.firstname}/>
-                <InputText labelText="Last Name" name="lastname" placeholder="Enter last name"
-                           defaultValue={fields.lastname}
-                           onChange={inputOnChange} error={errors.lastname}/>
-                <InputText labelText="Password" type="password" name="password" placeholder="Enter password"
-                           defaultValue={fields.password}
-                           onChange={inputOnChange} error={errors.password}/>
-                <InputText labelText="Repeat Password" type="password" name="repeatPassword"
-                           placeholder="Enter repeat password" defaultValue={fields.repeatPassword}
-                           onChange={inputOnChange} error={errors.repeatPassword}/>
-                <div className="form-group">
-                    <label>
-                        Gender:
-                        <InputRadioElement name="gender" id="male" value="male" labelText="Male"
-                                           defaultChecked={fields.gender === "male"} onClick={inputOnChange}/>
-                        <InputRadioElement name="gender" id="female" value="female" labelText="Female"
-                                           defaultChecked={fields.gender === "female"} onClick={inputOnChange}/>
-                    </label>
+                <div className="row mb-4">
+                    <div className="col-4">
+                        <img width="100%" src={avatar} alt=""/>
+                    </div>
+                    <div className="col-8 d-flex align-items-center">
+                        <h4>{`${firstname} ${lastname}`}</h4>
+                    </div>
+                </div>
+
+                <div className="row mb-4">
+                    <div className="col-12">
+                        <p><strong>Email:</strong> {email}</p>
+                        <p><strong>Mobile:</strong> {mobile}</p>
+                        <p><strong>Location:</strong> {country + ' ' + city}</p>
+                    </div>
                 </div>
             </React.Fragment>
         );

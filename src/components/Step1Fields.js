@@ -1,35 +1,33 @@
 import React from "react";
-import FieldInput from "./FieldInput";
+import InputText from "./InputText";
 import InputRadioElement from "./InputRadioElement";
 
-export default class Step1 extends React.Component {
-    constructor(props){
-        super(props);
-
-        this.state ={
-            firstname: '',
-            lastname: '',
-            password1: '',
-            password2: '',
-        };
-    }
-
-    fieldInputOnChange = (event) => {
-        this.setState({[event.target.name]: event.target.value}, ()=>{console.log(this.state)});
-    };
-
+export default class Step1Fields extends React.Component {
     render() {
+        const {inputOnChange, fields, errors} = this.props;
         return (
             <React.Fragment>
-                <FieldInput labelText="First Name" name="firstname" placeholder="Enter first name" onChange={this.fieldInputOnChange}/>
-                <FieldInput labelText="Last Name" name="lastname" placeholder="Enter last name" onChange={this.fieldInputOnChange}/>
-                <FieldInput labelText="Password" name="password1" placeholder="Enter password" onChange={this.fieldInputOnChange}/>
-                <FieldInput labelText="Repeat Password" name="password2" placeholder="Enter repeat password" onChange={this.fieldInputOnChange}/>
-                <label>
-                    Gender:
-                    <InputRadioElement name="gender" id="male" value="male" labelText="Male" defaultChecked={true}/>
-                    <InputRadioElement name="gender" id="female" value="female" labelText="Female"/>
-                </label>
+                <InputText labelText="First Name" name="firstname" placeholder="Enter first name"
+                           defaultValue={fields.firstname}
+                           onChange={inputOnChange} error={errors.firstname}/>
+                <InputText labelText="Last Name" name="lastname" placeholder="Enter last name"
+                           defaultValue={fields.lastname}
+                           onChange={inputOnChange} error={errors.lastname}/>
+                <InputText labelText="Password" type="password" name="password" placeholder="Enter password"
+                           defaultValue={fields.password}
+                           onChange={inputOnChange} error={errors.password}/>
+                <InputText labelText="Repeat Password" type="password" name="repeatPassword"
+                           placeholder="Enter repeat password" defaultValue={fields.repeatPassword}
+                           onChange={inputOnChange} error={errors.repeatPassword}/>
+                <div className="form-group">
+                    <label>
+                        Gender:
+                        <InputRadioElement name="gender" id="male" value="male" labelText="Male"
+                                           defaultChecked={fields.gender === "male"} onClick={inputOnChange}/>
+                        <InputRadioElement name="gender" id="female" value="female" labelText="Female"
+                                           defaultChecked={fields.gender === "female"} onClick={inputOnChange}/>
+                    </label>
+                </div>
             </React.Fragment>
         );
     }

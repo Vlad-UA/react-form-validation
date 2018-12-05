@@ -1,27 +1,77 @@
 import React from "react";
 import InputText from "./InputText";
-import InputRadioElement from "./InputRadioElement";
 
-export default class Step1Fields extends React.Component {
+export default class Step2Fields extends React.Component {
+
+    getCountries = items => {
+        return items.map(item => (
+            <option key={item.id} value={item.id}>
+                {item.name}
+            </option>
+        ));
+    };
+
+    getCities = (country, citiesAll) => {
+        const citiesInCountry = [{key: '0', name: 'Select City'}];
+
+        Object.keys(citiesAll).forEach((key) => {
+                if (citiesAll[key].country === Number(country)) {
+                    citiesInCountry.push({key, name: citiesAll[key].name});
+                }
+            }
+        );
+
+        return citiesInCountry.map(item => (
+                <option key={item.key} value={item.key}>
+                    {item.name}
+                </option>
+            ));
+    };
+
+
     render() {
-        const {inputOnChange, fields, errors} = this.props;
+        const {inputOnChange, fields, errors, countriesData, citiesData} = this.props;
         return (
             <React.Fragment>
-                <InputText labelText="First Name" name="firstname" placeholder="Enter first name" defaultValue={fields.firstname}
-                           onChange={inputOnChange} error={errors.firstname}/>
-                <InputText labelText="Last Name" name="lastname" placeholder="Enter last name" defaultValue={fields.lastname}
-                           onChange={inputOnChange}  error={errors.lastname}/>
-                <InputText labelText="Password" type="password" name="password" placeholder="Enter password" defaultValue={fields.password}
-                           onChange={inputOnChange}  error={errors.password}/>
-                <InputText labelText="Repeat Password"  type="password" name="repeatPassword" placeholder="Enter repeat password" defaultValue={fields.repeatPassword}
-                           onChange={inputOnChange}  error={errors.repeatPassword}/>
-                <label>
-                    Gender:
-                    <InputRadioElement name="gender" id="male" value="male" labelText="Male"
-                                       defaultChecked={fields.gender === "male"} onClick={inputOnChange}/>
-                    <InputRadioElement name="gender" id="female" value="female" labelText="Female"
-                                       defaultChecked={fields.gender === "female"} onClick={inputOnChange}/>
-                </label>
+                <InputText labelText="Email" name="email" placeholder="Enter email" defaultValue={fields.email}
+                           onChange={inputOnChange} error={errors.email}/>
+                <InputText labelText="Mobile" name="mobile" placeholder="Enter mobile" defaultValue={fields.mobile}
+                           onChange={inputOnChange} error={errors.mobile}/>
+
+                <div className="form-group">
+                    <label>
+                        Country:
+                        <select
+                            className="form-control"
+                            id="country"
+                            name="country"
+                            value={fields.country}
+                            onChange={inputOnChange}
+                        >
+                            {this.getCountries(countriesData)}
+                        </select>
+                    </label>
+                </div>
+
+                <div className="form-group">
+                    <label>
+                        Cities:
+                        <select
+                            className={"form-control" + (errors.city ? " invalid" : "")}
+                            id="city"
+                            name="city"
+                            value={fields.city}
+                            onChange={inputOnChange}
+                        >
+                            {this.getCities(fields.country, citiesData)}
+                        </select>
+                    </label>
+                    {errors.city &&
+                    <div className="invalid-feedback">
+                        {errors.city}
+                    </div>
+                    }
+                </div>
             </React.Fragment>
         );
     }

@@ -1,76 +1,30 @@
 import React from "react";
-import InputText from "./InputText";
 
-export default class Step2Fields extends React.Component {
+export default class Step3Fields extends React.Component {
+    onChangeAvatar = (event) => {
+        event.persist();
 
-    getCountries = items => {
-        return items.map(item => (
-            <option key={item.id} value={item.id}>
-                {item.name}
-            </option>
-        ));
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            this.props.onChangeAvatar(event.target.result);
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
     };
-
-    getCities = (country, citiesAll) => {
-        const citiesInCountry = [{key: '0', name: 'Select City'}];
-
-        Object.keys(citiesAll).forEach((key) => {
-                if (citiesAll[key].country === Number(country)) {
-                    citiesInCountry.push({key, name: citiesAll[key].name});
-                }
-            }
-        );
-
-        return citiesInCountry.map(item => (
-                <option key={item.key} value={item.key}>
-                    {item.name}
-                </option>
-            ));
-    };
-
 
     render() {
-        const {inputOnChange, fields, errors, countriesData, citiesData} = this.props;
+        const {fields: {avatar: avatarSrc=''}, errors: {avatar: avatarError=''}} = this.props;
         return (
             <React.Fragment>
-                <InputText labelText="Email" name="email" placeholder="Enter email" defaultValue={fields.email}
-                           onChange={inputOnChange} error={errors.email}/>
-                <InputText labelText="Mobile" name="mobile" placeholder="Enter mobile" defaultValue={fields.mobile}
-                           onChange={inputOnChange} error={errors.mobile}/>
+                <img className="mb-4" width="100%" alt="Avatar"
+                     src={avatarSrc ? avatarSrc : "https://reactwarriors.github.io/reactwarriors-stage-2/static/media/default-avatar.59337bae.png"}/>
 
-                <div className="form-group">
-                    <label>
-                        Country:
-                        <select
-                            className="form-control"
-                            id="country"
-                            name="country"
-                            value={fields.country}
-                            onChange={inputOnChange}
-                        >
-                            {this.getCountries(countriesData)}
-                        </select>
-                    </label>
-                </div>
-
-                <div className="form-group">
-                    <label>
-                        Cities:
-                        <select
-                            className={"form-control" + (errors.city ? " invalid" : "")}
-                            id="city"
-                            name="city"
-                            value={fields.city}
-                            onChange={inputOnChange}
-                        >
-                            {this.getCities(fields.country, citiesData)}
-                        </select>
-                    </label>
-                    {errors.city &&
-                    <div className="invalid-feedback">
-                        {errors.city}
+                <div className="mb-4">
+                    <div className="custom-file">
+                        <input type="file" className="custom-file-input" id="customFile" name="avatar" onChange={this.onChangeAvatar} />
+                        <label className={"custom-file-label" + (avatarError ? " invalid" : "")} htmlFor="customFile">Choose avatar</label>
                     </div>
-                    }
+                    {avatarError && <div className="invalid-feedback">Required</div>}
                 </div>
             </React.Fragment>
         );
